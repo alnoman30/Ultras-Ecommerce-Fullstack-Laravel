@@ -50,21 +50,6 @@
             <div class="pb-3"></div>
 
             <div class="form-floating mb-3">
-              <input type="text"
-                     name="mobile"
-                     class="form-control form-control_gray"
-                     value="{{ old('mobile') }}"
-                     required>
-              <label>Mobile *</label>
-
-              @error('mobile')
-                <small class="text-danger">{{ $message }}</small>
-              @enderror
-            </div>
-
-            <div class="pb-3"></div>
-
-            <div class="form-floating mb-3">
               <input type="password"
                      name="password"
                      class="form-control form-control_gray"
