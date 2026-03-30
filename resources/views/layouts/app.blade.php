@@ -477,7 +477,7 @@
 
                     <div class="header-tools__item hover-container">
                         @auth
-                            <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}"
+                            <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : route('dashboard') }}"
                                 class="header-tools__item">
                                 {{ auth()->user()->name }}
                             </a>

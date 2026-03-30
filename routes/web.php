@@ -23,13 +23,13 @@ Route::get('/prod-details', [HomeController::class, 'profDetails'])->name('prod.
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'user'])->name('user.dashboard');
+})->middleware(['auth', 'user'])->name('dashboard');
 
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
-        return 'Dashboard';
+        return view('pages.admin.index');
     })->name('admin.dashboard');
 });
 
