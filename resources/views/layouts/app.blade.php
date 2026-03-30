@@ -477,14 +477,9 @@
 
                     <div class="header-tools__item hover-container">
                         @auth
-                            <a href="{{ route('dashboard') }}" class="header-tools__item">
+                            <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}"
+                                class="header-tools__item">
                                 {{ auth()->user()->name }}
-                            </a>
-                            <a href="{{ route('login') }}" class="header-tools__item">
-                                <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <use href="#icon_user" />
-                                </svg>
                             </a>
                         @else
                             <a href="{{ route('login') }}" class="header-tools__item">
@@ -494,7 +489,6 @@
                                 </svg>
                             </a>
                         @endauth
-
                     </div>
 
                     <a href="{{ route('wishlist') }}" class="header-tools__item">

@@ -46,6 +46,11 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        flash()->success('Your account has been created successfully.');
+        return redirect(
+        auth()->user()->role === 'admin'
+            ? route('admin.dashboard', absolute: false)
+            : route('user.dashboard', absolute: false)
+    );
     }
 }

@@ -64,9 +64,12 @@
 
               |
 
-              <a href="{{ route('dashboard') }}" class="btn-text">
+              @auth
+                  <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}" class="btn-text">
                 My Account
               </a>
+              @endauth
+
             </div>
 
             @if (Route::has('password.request'))

@@ -64,8 +64,8 @@ function confirmLogout(event, el) {
         text: "You will be logged out!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#b9a16b',
+        cancelButtonColor: 'rgb(5, 5, 5)',
         confirmButtonText: 'logout',
         reverseButtons: true
     }).then((result) => {
