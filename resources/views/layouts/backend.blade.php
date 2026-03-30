@@ -74,12 +74,12 @@
                                     </a>
                                     <ul class="sub-menu">
                                         <li class="sub-menu-item">
-                                            <a href="add-brand.html" class="">
+                                            <a href="{{ route('admin.brand.create') }}" class="">
                                                 <div class="text">New Brand</div>
                                             </a>
                                         </li>
                                         <li class="sub-menu-item">
-                                            <a href="brands.html" class="">
+                                            <a href="{{ route('admin.brand') }}" class="">
                                                 <div class="text">Brands</div>
                                             </a>
                                         </li>
@@ -253,7 +253,7 @@
                                                 </a>
                                             </li>
 
-                                            <!-- 🔥 FIXED LOGOUT -->
+                                            <!-- LOGOUT -->
                                             <li>
                                                 <form method="POST" action="{{ route('logout') }}">
                                                     @csrf
@@ -273,8 +273,12 @@
                             </div>
                         </div>
                     </div>
+                    dshdj
 
                     @yield('content')
+
+
+                    
 
                 </div>
             </div>

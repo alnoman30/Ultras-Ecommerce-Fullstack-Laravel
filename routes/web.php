@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BrandController;
 
 
 // Website Routes available to all users
@@ -28,10 +30,14 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('pages.admin.index');
-    })->name('admin.dashboard');
-});
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+    // brand routes
+    Route::get('/admin/brands', [BrandController::class, 'index'])->name('admin.brand');
+    Route::get('/admin/brands/create', [BrandController::class, 'create'])->name('admin.brand.create');
+    Route::post('/admin/brands/store', [BrandController::class, 'store'])->name('admin.brand.store');
+    Route::delete('/admin/brands/{id}/delete', [BrandController::class, 'destroy'])->name('admin.brand.destroy');
+}); 
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
