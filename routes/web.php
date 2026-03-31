@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 
 
 // Website Routes available to all users
@@ -49,6 +50,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/categories/{id}/edit', [CategoryController::class, 'edit'])->name('admin.category.edit');
     Route::put('/admin/categories/{id}/update', [CategoryController::class, 'update'])->name('admin.category.update');
     Route::delete('/admin/categories/{id}/delete', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
+
+
+    // product routes
+    Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.product');
+    Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.product.create');
+    Route::post('/admin/products/store', [ProductController::class, 'store'])->name('admin.product.store');
+    Route::get('/admin/products/{id}/edit', [ProductController::class, 'edit'])->name('admin.product.edit');
+    Route::put('/admin/products/{id}/update', [ProductController::class, 'update'])->name('admin.product.update');
+    Route::delete('/admin/products/{id}/delete', [ProductController::class, 'destroy'])->name('admin.product.destroy');
 }); 
 
 Route::middleware('auth')->group(function () {

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use app\Models\Product;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model
@@ -11,4 +13,9 @@ class Brand extends Model
         'slug',
         'image',
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
