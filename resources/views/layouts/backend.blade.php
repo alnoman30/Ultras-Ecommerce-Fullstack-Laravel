@@ -123,7 +123,7 @@
                                     </ul>
                                 </li>
                                 <li class="menu-item">
-                                    <a href="slider.html" class="">
+                                    <a href="{{ route('admin.slider') }}" class="">
                                         <div class="icon"><i class="icon-image"></i></div>
                                         <div class="text">Slider</div>
                                     </a>
@@ -136,14 +136,14 @@
                                 </li>
 
                                 <li class="menu-item">
-                                    <a href="users.html" class="">
+                                    <a href="{{ route('admin.users') }}" class="">
                                         <div class="icon"><i class="icon-user"></i></div>
                                         <div class="text">User</div>
                                     </a>
                                 </li>
 
                                 <li class="menu-item">
-                                    <a href="settings.html" class="">
+                                    <a href="{{ route('admin.settings') }}" class="">
                                         <div class="icon"><i class="icon-settings"></i></div>
                                         <div class="text">Settings</div>
                                     </a>

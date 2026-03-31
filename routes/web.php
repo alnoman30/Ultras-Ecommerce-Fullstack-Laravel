@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SliderController;
 
 
 // Website Routes available to all users
@@ -59,7 +60,19 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/products/{id}/edit', [ProductController::class, 'edit'])->name('admin.product.edit');
     Route::put('/admin/products/{id}/update', [ProductController::class, 'update'])->name('admin.product.update');
     Route::delete('/admin/products/{id}/delete', [ProductController::class, 'destroy'])->name('admin.product.destroy');
-}); 
+
+
+    // slider routes
+    Route::get('/admin/sliders', [SliderController::class, 'index'])->name('admin.slider');
+    Route::get('/admin/sliders/create', [SliderController::class, 'create'])->name('admin.slider.create');
+    Route::post('/admin/sliders/store', [SliderController::class, 'store'])->name('admin.slider.store');
+   
+
+    // users route
+    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+    // settings route
+    Route::get('/admin/settings', [AdminController::class, 'settings'])->name('admin.settings');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -67,4 +80,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
