@@ -2,26 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Brand;
+use App\Models\Category;
 
-class BrandController extends Controller
+use Illuminate\Http\Request;
+
+class CategoryController extends Controller
 {
     public function index()
     {
-        $brands = Brand::latest()->paginate(7);
-        return view('pages.admin.brand', compact('brands'));
+        $categories = Category::latest()->paginate(7);
+        return view('pages.admin.categories', compact('categories'));
     }
-
-
 
 
     public function create()
     {
-        return view('pages.admin.brand-create');
+        return view('pages.admin.category-create');
     }
-
-
 
 
     public function store(Request $request)
@@ -29,7 +26,7 @@ class BrandController extends Controller
         // Validate the request data
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:brands',
+            'slug' => 'required|string|max:255|unique:categories',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -42,7 +39,7 @@ class BrandController extends Controller
             $image = $request->file('image');
 
             // Create folder if not exists
-            $destinationPath = public_path('uploads/brands');
+            $destinationPath = public_path('uploads/categories');
             if (!file_exists($destinationPath)) {
                 mkdir($destinationPath, 0755, true);
             }
@@ -50,33 +47,32 @@ class BrandController extends Controller
             // Generate unique image name
             $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            $validatedData['image'] = 'uploads/brands/' . $imageName;
+            $validatedData['image'] = 'uploads/categories/' . $imageName;
         }
 
-        Brand::create($validatedData);
+        Category::create($validatedData);
 
-        flash()->success('Brand created successfully!');
+        flash()->success('Category created successfully!');
 
-        return redirect()->route('admin.brand');
+        return redirect()->route('admin.category');
     }
 
 
     public function edit($id)
     {
-        $brand = Brand::findOrFail($id);
-        return view('pages.admin.brand-edit', compact('brand'));
+        $category = Category::findOrFail($id);
+        return view('pages.admin.category-edit', compact('category'));
     }
-
 
 
     public function update(Request $request, $id)
     {
-        $brand = Brand::findOrFail($id);
+        $category = Category::findOrFail($id);
 
         // Validate the request data
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:brands,slug,' . $brand->id,
+            'slug' => 'required|string|max:255|unique:categories,slug,' . $category->id,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -86,14 +82,14 @@ class BrandController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($brand->image && file_exists(public_path($brand->image))) {
-                unlink(public_path($brand->image));
+            if ($category->image && file_exists(public_path($category->image))) {
+                unlink(public_path($category->image));
             }
 
             $image = $request->file('image');
 
             // Create folder if not exists
-            $destinationPath = public_path('uploads/brands');
+            $destinationPath = public_path('uploads/categories');
             if (!file_exists($destinationPath)) {
                 mkdir($destinationPath, 0755, true);
             }
@@ -101,33 +97,29 @@ class BrandController extends Controller
             // Generate unique image name
             $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            $validatedData['image'] = 'uploads/brands/' . $imageName;
+            $validatedData['image'] = 'uploads/categories/' . $imageName;
         }
 
-        $brand->update($validatedData);
+        $category->update($validatedData);
 
-        flash()->success('Brand updated successfully!');
+        flash()->success('Category updated successfully!');
 
-        return redirect()->route('admin.brand');
+        return redirect()->route('admin.category');
     }
-
-
-
-
-
 
     public function destroy($id)
     {
-        $brand = Brand::findOrFail($id);
+        $category = Category::findOrFail($id);
 
-        if ($brand->image && file_exists(public_path($brand->image))) {
-            unlink(public_path($brand->image));
+        // Delete image if exists
+        if ($category->image && file_exists(public_path($category->image))) {
+            unlink(public_path($category->image));
         }
 
-        $brand->delete();
+        $category->delete();
 
-        flash()->success('Brand deleted successfully!');
+        flash()->success('Category deleted successfully!');
 
-        return redirect()->route('admin.brand');
+        return redirect()->route('admin.category');
     }
 }

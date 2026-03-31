@@ -1,10 +1,12 @@
 @extends('layouts.backend')
+
 @section('content')
 <div class="main-content">
     <div class="main-content-inner">
         <div class="main-content-wrap">
+
             <div class="flex items-center flex-wrap justify-between gap20 mb-27">
-                <h3>Brand infomation</h3>
+                <h3>Edit Brand</h3>
                 <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
                     <li>
                         <a href="{{ route('admin.dashboard') }}">
@@ -19,34 +21,57 @@
                     </li>
                     <li><i class="icon-chevron-right"></i></li>
                     <li>
-                        <div class="text-tiny">New Brand</div>
+                        <div class="text-tiny">Edit Brand</div>
                     </li>
                 </ul>
             </div>
 
             <!-- form -->
             <div class="wg-box">
-                <form class="form-new-product form-style-1" action="{{ route('admin.brand.store') }}" method="POST" enctype="multipart/form-data">
+                <form class="form-new-product form-style-1"
+                      action="{{ route('admin.brand.update', $brand->id) }}"
+                      method="POST"
+                      enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
 
+                    <!-- Brand Name -->
                     <fieldset class="name">
                         <div class="body-title">Brand Name <span class="tf-color-1">*</span></div>
-                        <input class="flex-grow" type="text" placeholder="Brand name" name="name" required>
+                        <input class="flex-grow"
+                               type="text"
+                               name="name"
+                               value="{{ old('name', $brand->name) }}"
+                               required>
                     </fieldset>
 
+                    <!-- Brand Slug -->
                     <fieldset class="name">
                         <div class="body-title">Brand Slug <span class="tf-color-1">*</span></div>
-                        <input class="flex-grow" type="text" placeholder="Brand Slug" name="slug" required>
+                        <input class="flex-grow"
+                               type="text"
+                               name="slug"
+                               value="{{ old('slug', $brand->slug) }}"
+                               required>
                     </fieldset>
 
+                    <!-- Image Upload -->
                     <fieldset>
-                        <div class="body-title">Upload Image <span class="tf-color-1">*</span></div>
+                        <div class="body-title">Upload Image</div>
 
                         <div class="upload-image flex-grow">
 
-                            <!-- Preview -->
+                            <!-- Existing Image -->
+                            @if($brand->image)
+                                <div class="mb-3">
+                                    <img src="{{ asset($brand->image) }}" alt="Brand Image" width="120">
+                                </div>
+                            @endif
+
+                            <!-- Preview New Image -->
                             <div class="item" id="imgpreview" style="display:none;">
-                                <img src="" class="effect8" alt="Preview Image" style="max-width: 150px; border-radius: 8px;">
+                                <img src="" class="effect8"
+                                     style="max-width: 150px; border-radius: 8px;">
                             </div>
 
                             <!-- Upload -->
@@ -66,9 +91,10 @@
                         </div>
                     </fieldset>
 
+                    <!-- Submit -->
                     <div class="bot">
                         <div></div>
-                        <button class="tf-button w208" type="submit">Save</button>
+                        <button class="tf-button w208" type="submit">Update</button>
                     </div>
                 </form>
             </div>

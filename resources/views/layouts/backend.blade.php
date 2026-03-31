@@ -97,7 +97,7 @@
                                             </a>
                                         </li>
                                         <li class="sub-menu-item">
-                                            <a href="categories.html" class="">
+                                            <a href="{{ route('admin.category') }}" class="">
                                                 <div class="text">Categories</div>
                                             </a>
                                         </li>
@@ -295,30 +295,30 @@
     @stack('scripts')
     <script>
         function confirmLogout(event, el) {
-    event.preventDefault();
+        event.preventDefault();
 
-    Swal.fire({
-        title: '<span style="font-size: 22px; font-weight: bold;">Are you sure?</span>',
-        html: '<span style="font-size: 16px;">You will be logged out!</span>',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '<span style="font-size: 16px; font-weight: bold;">Logout</span>',
-        cancelButtonText: '<span style="font-size: 16px;">Cancel</span>',
-        reverseButtons: true,
-        confirmButtonColor: '#b9a16b',
-        cancelButtonColor: 'rgb(5, 5, 5)',
-        width: '450px',
-        padding: '2.5em',
-        customClass: {
-            popup: 'swal-popup-custom',
-            confirmButton: 'swal-btn-confirm',
-            cancelButton: 'swal-btn-cancel'
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            el.closest('form').submit();
-        }
-    });
+        Swal.fire({
+            title: '<span style="font-size: 22px; font-weight: bold;">Are you sure?</span>',
+            html: '<span style="font-size: 16px;">You will be logged out!</span>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '<span style="font-size: 16px; font-weight: bold;">Logout</span>',
+            cancelButtonText: '<span style="font-size: 16px;">Cancel</span>',
+            reverseButtons: true,
+            confirmButtonColor: '#b9a16b',
+            cancelButtonColor: 'rgb(5, 5, 5)',
+            width: '450px',
+            padding: '2.5em',
+            customClass: {
+                popup: 'swal-popup-custom',
+                confirmButton: 'swal-btn-confirm',
+                cancelButton: 'swal-btn-cancel'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                el.closest('form').submit();
+            }
+        });
 }
 
         (function ($) {

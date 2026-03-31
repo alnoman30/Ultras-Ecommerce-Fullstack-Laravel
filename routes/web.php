@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
 
 
 // Website Routes available to all users
@@ -36,7 +37,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/brands', [BrandController::class, 'index'])->name('admin.brand');
     Route::get('/admin/brands/create', [BrandController::class, 'create'])->name('admin.brand.create');
     Route::post('/admin/brands/store', [BrandController::class, 'store'])->name('admin.brand.store');
+    Route::get('/admin/brands/{id}/edit', [BrandController::class, 'edit'])->name('admin.brand.edit');
+    Route::put('/admin/brands/{id}/update', [BrandController::class, 'update'])->name('admin.brand.update');
     Route::delete('/admin/brands/{id}/delete', [BrandController::class, 'destroy'])->name('admin.brand.destroy');
+
+
+    // category routes
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.category');
+    Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('admin.category.create');
+    Route::post('/admin/categories/store', [CategoryController::class, 'store'])->name('admin.category.store');
+    Route::get('/admin/categories/{id}/edit', [CategoryController::class, 'edit'])->name('admin.category.edit');
+    Route::put('/admin/categories/{id}/update', [CategoryController::class, 'update'])->name('admin.category.update');
+    Route::delete('/admin/categories/{id}/delete', [CategoryController::class, 'destroy'])->name('admin.category.destroy');
 }); 
 
 Route::middleware('auth')->group(function () {
