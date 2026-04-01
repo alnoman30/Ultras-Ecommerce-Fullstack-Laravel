@@ -20,8 +20,9 @@ Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/wishlist', [HomeController::class, 'wishlist'])->name('wishlist');
 
+// view product details
+Route::get('/product/{slug}', [ProductController::class, 'prodDetails'])->name('product.details');
 
-Route::get('/prod-details', [HomeController::class, 'profDetails'])->name('prod.details');
 
 
 
@@ -66,6 +67,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/sliders', [SliderController::class, 'index'])->name('admin.slider');
     Route::get('/admin/sliders/create', [SliderController::class, 'create'])->name('admin.slider.create');
     Route::post('/admin/sliders/store', [SliderController::class, 'store'])->name('admin.slider.store');
+    Route::get('/admin/sliders/{id}/edit', [SliderController::class, 'edit'])->name('admin.slider.edit');
+    Route::put('/admin/sliders/{id}/update', [SliderController::class, 'update'])->name('admin.slider.update');
+    Route::delete('/admin/sliders/{id}/delete', [SliderController::class, 'destroy'])->name('admin.slider.destroy');
    
 
     // users route

@@ -31,12 +31,18 @@
 
                     <fieldset class="name">
                         <div class="body-title">Brand Name <span class="tf-color-1">*</span></div>
-                        <input class="flex-grow" type="text" placeholder="Brand name" name="name" required>
+                        <input class="flex-grow" type="text" value="{{ old('name') }}" placeholder="Brand name" name="name" required>
+                        @error('name')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </fieldset>
 
                     <fieldset class="name">
                         <div class="body-title">Brand Slug <span class="tf-color-1">*</span></div>
-                        <input class="flex-grow" type="text" placeholder="Brand Slug" name="slug" required>
+                        <input class="flex-grow" type="text" value="{{ old('slug') }}" placeholder="Brand Slug" name="slug" required>
+                        @error('slug')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
                     </fieldset>
 
                     <fieldset>
@@ -60,6 +66,9 @@
                                         <span class="tf-color">click to browse</span>
                                     </span>
                                     <input type="file" id="myFile" name="image" accept="image/*" hidden>
+                                    @error('image')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
                                 </label>
                             </div>
 

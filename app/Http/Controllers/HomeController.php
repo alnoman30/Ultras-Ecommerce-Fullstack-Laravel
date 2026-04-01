@@ -1,21 +1,29 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Category;
 
-use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Slider;      
+use Illuminate\Http\Request;    
 
 class HomeController extends Controller
 {
     public function index()
     {
+
         $categories = Category::all();
-        return view('pages.website.index', compact('categories'));
+        $sliders = Slider::all();
+        return view('pages.website.index', compact('categories', 'sliders'));
     }
 
     public function shop()
     {
-        return view('pages.website.shop');
+        $products = Product::latest()->paginate(9);
+        $categories = Category::all();
+        $brands = Brand::withCount('products')->get();
+        return view('pages.website.shop', compact('products', 'categories', 'brands'));
     }
 
     public function cart()
@@ -49,8 +57,5 @@ class HomeController extends Controller
     }
 
 
-    public function profDetails()
-    {
-        return view('pages.website.prod-details');
-    }
+    
 }

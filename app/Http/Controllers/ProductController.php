@@ -186,4 +186,26 @@ class ProductController extends Controller
         flash()->success('Product deleted successfully!');
         return redirect()->route('admin.product');
     }
+
+
+
+
+
+    // view product details
+    public function prodDetails($slug)
+    {
+        $product = Product::with('category')->where('slug', $slug)->firstOrFail();
+
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->take(4)
+            ->get();
+
+        return view('pages.website.prod-details', [
+            'product' => $product,
+            'brands' => Brand::all(),
+            'categories' => Category::all(),
+            'relatedProducts' => $relatedProducts,
+        ]);
+    }
 }

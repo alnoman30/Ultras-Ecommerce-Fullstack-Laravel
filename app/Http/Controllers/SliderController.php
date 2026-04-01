@@ -50,16 +50,58 @@ class SliderController extends Controller
 
     public function edit($id)
     {
-        // Logic to show form for editing an existing slider
+        $slider = Slider::findOrFail($id);
+        return view('pages.admin.sliders-edit', compact('slider'));
     }
 
     public function update(Request $request, $id)
     {
-        // Logic to update an existing slider in the database
+        $slider = Slider::findOrFail($id);
+
+        // Validate request
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'line_one' => 'nullable|string|max:255',
+            'line_two' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($slider->image && file_exists(public_path('uploads/sliders/' . $slider->image))) {
+                unlink(public_path('uploads/sliders/' . $slider->image));
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/sliders'), $imageName); // store in public/uploads/sliders
+            $validatedData['image'] = $imageName;
+        }
+
+        $slider->update($validatedData);
+
+        flash()->success('Slider updated successfully!');
+
+        return redirect()->route('admin.slider');
     }
+
+
+
 
     public function destroy($id)
     {
-        // Logic to delete a slider from the database
+        $slider = Slider::findOrFail($id);
+
+        // Delete image if it exists
+        if ($slider->image && file_exists(public_path('uploads/sliders/' . $slider->image))) {
+            unlink(public_path('uploads/sliders/' . $slider->image));
+        }
+
+        $slider->delete();
+
+        flash()->success('Slider deleted successfully!');
+
+        return redirect()->route('admin.slider');
     }
 }

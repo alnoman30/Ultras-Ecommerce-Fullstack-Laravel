@@ -65,19 +65,22 @@
                                         <td>{{ $slider->link }}</td>
                                         <td>
                                             <div class="list-icon-function">
-                                                <a href="http://localhost:8000/admin/slider/3/edit">
+                                                <a href="{{ route('admin.slider.edit', $slider->id) }}">
                                                     <div class="item edit">
                                                         <i class="icon-edit-3"></i>
                                                     </div>
                                                 </a>
-                                                <form action="http://localhost:8000/admin/slider/3/delete" method="POST">
-                                                    <input type="hidden" name="_token"
-                                                        value="8LNRTO4LPXHvbK2vgRcXqMeLgqtqNGjzWSNru7Xx" autocomplete="off">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                    <div class="item text-danger delete">
-                                                        <i class="icon-trash-2"></i>
-                                                    </div>
-                                                </form>
+                                                <form action="{{ route('admin.slider.destroy', $slider->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="button" onclick="confirmDelete(event, this)"
+                                                            class="item text-danger delete"
+                                                            style="border:none; padding:0; background:none;">
+                                                            <i class="icon-trash-2"></i>
+                                                        </button>
+                                                    </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -99,3 +102,35 @@
         </div>
     </div>
 @endsection
+
+
+@push('scripts')
+    <script>
+        function confirmDelete(event, el) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: '<span style="font-size: 22px; font-weight: bold;">Are you sure?</span>',
+                html: '<span style="font-size: 16px;">This Slider will be deleted permanently!</span>',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '<span style="font-size: 16px; font-weight: bold;">Delete</span>',
+                cancelButtonText: '<span style="font-size: 16px;">Cancel</span>',
+                reverseButtons: true,
+                confirmButtonColor: '#b9a16b',
+                cancelButtonColor: 'rgb(5, 5, 5)',
+                width: '450px',
+                padding: '2.5em',
+                customClass: {
+                    popup: 'swal-popup-custom',
+                    confirmButton: 'swal-btn-confirm',
+                    cancelButton: 'swal-btn-cancel'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    el.closest('form').submit();
+                }
+            });
+        }
+    </script>
+@endpush
