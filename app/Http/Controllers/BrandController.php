@@ -9,7 +9,7 @@ class BrandController extends Controller
 {
     public function index()
     {
-        $brands = Brand::latest()->paginate(7);
+        $brands = Brand::withCount('products')->paginate(7);
         return view('pages.admin.brand', compact('brands'));
     }
 

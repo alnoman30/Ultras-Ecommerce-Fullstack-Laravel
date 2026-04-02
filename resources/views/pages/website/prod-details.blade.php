@@ -89,22 +89,34 @@
                 <div class="col-lg-5">
                     <div class="d-flex justify-content-between mb-4 pb-md-2">
                         <div class="breadcrumb mb-0 d-none d-md-block flex-grow-1">
-                            <a href="{{ route('home') }}" class="menu-link menu-link_us-s text-uppercase fw-medium">Home</a>
+                            <a href="{{ route('home') }}"
+                                class="menu-link menu-link_us-s text-uppercase fw-medium">Home</a>
                             <span class="breadcrumb-separator menu-link fw-medium ps-1 pe-1">/</span>
-                            <a href="{{ route('shop') }}" class="menu-link menu-link_us-s text-uppercase fw-medium">The Shop</a>
+                            <a href="{{ route('shop') }}" class="menu-link menu-link_us-s text-uppercase fw-medium">The
+                                Shop</a>
                         </div><!-- /.breadcrumb -->
 
                         <div
                             class="product-single__prev-next d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1">
-                            <a href="#" class="text-uppercase fw-medium"><svg width="10" height="10"
-                                    viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+
+                            {{-- PREVIOUS --}}
+                            <a href="{{ $prevProduct ? route('product.details', $prevProduct->slug) : '#' }}"
+                                class="text-uppercase fw-medium {{ !$prevProduct ? 'disabled' : '' }}">
+                                <svg width="10" height="10" viewBox="0 0 25 25">
                                     <use href="#icon_prev_md" />
-                                </svg><span class="menu-link menu-link_us-s">Prev</span></a>
-                            <a href="#" class="text-uppercase fw-medium"><span
-                                    class="menu-link menu-link_us-s">Next</span><svg width="10" height="10"
-                                    viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+                                </svg>
+                                <span class="menu-link menu-link_us-s">Prev</span>
+                            </a>
+
+                            {{-- NEXT --}}
+                            <a href="{{ $nextProduct ? route('product.details', $nextProduct->slug) : '#' }}"
+                                class="text-uppercase fw-medium {{ !$nextProduct ? 'disabled' : '' }}">
+                                <span class="menu-link menu-link_us-s">Next</span>
+                                <svg width="10" height="10" viewBox="0 0 25 25">
                                     <use href="#icon_next_md" />
-                                </svg></a>
+                                </svg>
+                            </a>
+
                         </div><!-- /.shop-acs -->
                     </div>
                     <h1 class="product-single__name">{{ $product->name }}</h1>
@@ -439,37 +451,69 @@
                     <div class="swiper-wrapper">
                         @foreach ($relatedProducts as $related)
                             <div class="swiper-slide product-card">
-                            <div class="pc__img-wrapper">
-                                <a href="details.html">
-                                    <img loading="lazy" src="{{ asset('website/assets/images/products/product_3.jpg') }}"
-                                        width="330" height="400" alt="Cropped Faux leather Jacket" class="pc__img">
-                                    <img loading="lazy"
-                                        src="{{ asset('website/assets/images/products/product_3-1.jpg') }}"
-                                        width="330" height="400" alt="Cropped Faux leather Jacket"
-                                        class="pc__img pc__img-second">
-                                </a>
-                                <button
-                                    class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
-                                    data-aside="cartDrawer" title="Add To Cart">Add To Cart</button>
-                            </div>
+                                <div class="pc__img-wrapper">
+                                    <a href="{{ route('product.details', $related->slug) }}">
+                                        <img loading="lazy" src="{{ asset('uploads/products/' . $related->image) }}"
+                                            width="330" height="400" alt="{{ $related->name }}" class="pc__img">
 
-                            <div class="pc__info position-relative">
-                                <p class="pc__category">Dresses</p>
-                                <h6 class="pc__title"><a href="details.html">Kirby T-Shirt</a></h6>
-                                <div class="product-card__price d-flex">
-                                    <span class="money price">$17</span>
+                                        {{-- Second image (if gallery exists) --}}
+                                        @php
+                                            $images = json_decode($related->images, true);
+                                        @endphp
+
+                                        @if (!empty($images) && isset($images[0]))
+                                            <img loading="lazy" src="{{ asset('uploads/products/' . $images[0]) }}"
+                                                width="330" height="400" alt="{{ $related->name }}"
+                                                class="pc__img pc__img-second">
+                                        @else
+                                            <img loading="lazy" src="{{ asset('uploads/products/' . $related->image) }}"
+                                                width="330" height="400" alt="{{ $related->name }}"
+                                                class="pc__img pc__img-second">
+                                        @endif
+                                    </a>
+
+                                    <button
+                                        class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
+                                        data-aside="cartDrawer" title="Add To Cart">
+                                        Add To Cart
+                                    </button>
                                 </div>
 
-                                <button
-                                    class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                                    title="Add To Wishlist">
-                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <use href="#icon_heart" />
-                                    </svg>
-                                </button>
+                                <div class="pc__info position-relative">
+                                    <p class="pc__category">
+                                        {{ $related->category->name ?? 'No Category' }}
+                                    </p>
+
+                                    <h6 class="pc__title">
+                                        <a href="{{ route('product.details', $related->slug) }}">
+                                            {{ $related->name }}
+                                        </a>
+                                    </h6>
+
+                                    <div class="product-card__price d-flex">
+                                        @if ($related->sale_price)
+                                            <span class="money price text-danger">
+                                                ${{ $related->sale_price }}
+                                            </span>
+                                            <span class="money price-old ms-2">
+                                                <del>${{ $related->regular_price }}</del>
+                                            </span>
+                                        @else
+                                            <span class="money price">
+                                                ${{ $related->regular_price }}
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <button
+                                        class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
+                                        title="Add To Wishlist">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                            <use href="#icon_heart" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
                         @endforeach
                     </div><!-- /.swiper-wrapper -->
                 </div><!-- /.swiper-container js-swiper-slider -->

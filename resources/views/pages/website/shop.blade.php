@@ -26,17 +26,17 @@
                                 </svg>
                             </button>
                         </h5>
-                        <div id="accordion-filter-1" class="accordion-collapse collapse show border-0"
-                            aria-labelledby="accordion-heading-1" data-bs-parent="#categories-list">
-                            <div class="accordion-body px-0 pb-0 pt-3">
-                                <ul class="list list-inline mb-0">
-                                    @foreach ($categories as $category)
-                                        <li class="list-item">
-                                            <a href="#" class="menu-link py-1">{{ $category->name }}</a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                        <div class="accordion-body px-0 pb-0 pt-3">
+                            <ul class="list list-inline mb-0">
+                                @foreach ($categories as $category)
+                                    <li class="list-item">
+                                        <a href="{{ route('shop', array_merge(request()->query(), ['category' => $category->id])) }}"
+                                            class="menu-link py-1">
+                                            {{ $category->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -148,15 +148,25 @@
                                         class="search-field__input form-control form-control-sm border-light border-2"
                                         placeholder="Search" />
                                 </div>
-                                <ul class="multi-select__list list-unstyled">
-                                    @foreach ($brands as $brand)
-                                        <li
-                                            class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
-                                            <span class="me-auto">{{ $brand->name }}</span>
-                                            <span class="text-secondary">{{ $brand->products->count() }}</span>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                <form action="{{ route('shop') }}" method="GET">
+                                    <ul class="multi-select__list list-unstyled">
+                                        @foreach ($brands as $brand)
+                                            <li
+                                                class="search-suggestion__item multi-select__item text-primary js-search-select js-multi-select">
+                                                <label class="d-flex align-items-center w-100">
+                                                    <!-- Hidden checkbox visually hidden but still functional -->
+                                                    <input type="checkbox" name="brands[]" value="{{ $brand->id }}"
+                                                        class="visually-hidden"
+                                                        {{ is_array(request('brands')) && in_array($brand->id, request('brands')) ? 'checked' : '' }}>
+                                                    <span class="me-auto">{{ $brand->name }}</span>
+                                                    <span class="text-secondary">{{ $brand->products_count }}</span>
+                                                </label>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <button type="submit" class="btn btn-primary mt-3">Apply Filters</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -179,22 +189,35 @@
                                 </svg>
                             </button>
                         </h5>
-                        <div id="accordion-filter-price" class="accordion-collapse collapse show border-0"
-                            aria-labelledby="accordion-heading-price" data-bs-parent="#price-filters">
-                            <input class="price-range-slider" type="text" name="price_range" value=""
-                                data-slider-min="10" data-slider-max="1000" data-slider-step="5"
-                                data-slider-value="[250,450]" data-currency="$" />
-                            <div class="price-range__info d-flex align-items-center mt-2">
-                                <div class="me-auto">
-                                    <span class="text-secondary">Min Price: </span>
-                                    <span class="price-range__min">$250</span>
-                                </div>
-                                <div>
-                                    <span class="text-secondary">Max Price: </span>
-                                    <span class="price-range__max">$450</span>
-                                </div>
-                            </div>
-                        </div>
+<form action="{{ route('shop') }}" method="GET">
+    <!-- Brands filter here -->
+
+    <!-- Price Range Filter -->
+    <div id="accordion-filter-price" class="accordion-collapse collapse show border-0"
+        aria-labelledby="accordion-heading-price" data-bs-parent="#price-filters">
+
+        <!-- Use hidden inputs to send min and max prices -->
+        <input type="hidden" name="min_price" class="min-price-input" value="{{ request('min_price', 250) }}">
+        <input type="hidden" name="max_price" class="max-price-input" value="{{ request('max_price', 450) }}">
+
+        <input class="price-range-slider" type="text" name="price_range" value=""
+            data-slider-min="10" data-slider-max="1000" data-slider-step="5"
+            data-slider-value="[{{ request('min_price', 250) }},{{ request('max_price', 450) }}]" data-currency="$" />
+
+        <div class="price-range__info d-flex align-items-center mt-2">
+            <div class="me-auto">
+                <span class="text-secondary">Min Price: </span>
+                <span class="price-range__min">${{ request('min_price', 250) }}</span>
+            </div>
+            <div>
+                <span class="text-secondary">Max Price: </span>
+                <span class="price-range__max">${{ request('max_price', 450) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Apply Filters</button>
+</form>
                     </div>
                 </div>
             </div>
@@ -405,7 +428,9 @@
 
                                 <div class="pc__info position-relative">
                                     <p class="pc__category">Dresses</p>
-                                    <h6 class="pc__title"><a href="{{ route('product.details', $product->slug) }}">{{ $product->name }}</a></h6>
+                                    <h6 class="pc__title"><a
+                                            href="{{ route('product.details', $product->slug) }}">{{ $product->name }}</a>
+                                    </h6>
                                     <div class="product-card__price d-flex">
                                         <span class="money price">${{ $product->regular_price }}</span>
                                     </div>
@@ -435,28 +460,53 @@
                     @endforeach
                 </div>
 
-                <nav class="shop-pages d-flex justify-content-between mt-3" aria-label="Page navigation">
-                    <a href="#" class="btn-link d-inline-flex align-items-center">
-                        <svg class="me-1" width="7" height="11" viewBox="0 0 7 11"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <use href="#icon_prev_sm" />
-                        </svg>
-                        <span class="fw-medium">PREV</span>
-                    </a>
-                    <ul class="pagination mb-0">
-                        <li class="page-item"><a class="btn-link px-1 mx-2 btn-link_active" href="#">1</a></li>
-                        <li class="page-item"><a class="btn-link px-1 mx-2" href="#">2</a></li>
-                        <li class="page-item"><a class="btn-link px-1 mx-2" href="#">3</a></li>
-                        <li class="page-item"><a class="btn-link px-1 mx-2" href="#">4</a></li>
-                    </ul>
-                    <a href="#" class="btn-link d-inline-flex align-items-center">
-                        <span class="fw-medium me-1">NEXT</span>
-                        <svg width="7" height="11" viewBox="0 0 7 11" xmlns="http://www.w3.org/2000/svg">
-                            <use href="#icon_next_sm" />
-                        </svg>
-                    </a>
-                </nav>
+                {{ $products->links('vendor.pagination.custom') }}
             </div>
         </section>
     </main>
 @endsection
+
+
+@push('scripts')
+    <script>
+        document.querySelectorAll('.js-multi-select').forEach(item => {
+            item.addEventListener('click', () => {
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+            });
+        });
+    </script>
+
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const slider = document.querySelector(".price-range-slider");
+
+    if (!slider) return;
+
+    const minInput = document.querySelector(".min-price-input");
+    const maxInput = document.querySelector(".max-price-input");
+
+    const minText = document.querySelector(".price-range__min");
+    const maxText = document.querySelector(".price-range__max");
+
+    // Listen to existing slider (already initialized by theme)
+    slider.addEventListener("slide", function (e) {
+
+        const values = e.detail.value; // important!
+        const [min, max] = values;
+
+        minInput.value = min;
+        maxInput.value = max;
+
+        minText.innerText = "$" + min;
+        maxText.innerText = "$" + max;
+    });
+
+});
+</script>
+
+
+    
+@endpush

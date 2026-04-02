@@ -201,11 +201,22 @@ class ProductController extends Controller
             ->take(4)
             ->get();
 
+        $prevProduct = Product::where('id', '<', $product->id)
+        ->orderBy('id', 'desc')
+        ->first();
+
+        $nextProduct = Product::where('id', '>', $product->id)
+        ->orderBy('id', 'asc')
+        ->first();
+
+
         return view('pages.website.prod-details', [
             'product' => $product,
             'brands' => Brand::all(),
             'categories' => Category::all(),
             'relatedProducts' => $relatedProducts,
+            'prevProduct' => $prevProduct,
+            'nextProduct' => $nextProduct,
         ]);
     }
 }
