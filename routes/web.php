@@ -8,12 +8,12 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\CartController;
 
 
 // Website Routes available to all users
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
-Route::get('/cart', [HomeController::class, 'cart'])->name('cart');
 Route::get('/cart/checkout', [HomeController::class, 'checkout'])->name('cart.checkout');
 Route::get('/cart/order-confirm', [HomeController::class, 'orderConfirm'])->name('order.confirm');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
@@ -23,9 +23,12 @@ Route::get('/wishlist', [HomeController::class, 'wishlist'])->name('wishlist');
 // view product details
 Route::get('/product/{slug}', [ProductController::class, 'prodDetails'])->name('product.details');
 
-
-
-
+// cart routes
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
