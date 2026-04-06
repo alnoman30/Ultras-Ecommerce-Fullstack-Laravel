@@ -32,7 +32,7 @@ class ProductController extends Controller
             'short_description' => 'nullable|string|max:255',
             'description' => 'required|string',
             'regular_price' => 'required|numeric',
-            'sale_price' => 'nullable|numeric',
+            'sale_price' => 'nullable|numeric|nullable',
             'SKU' => 'required|string|unique:products,SKU',
             'stock_status' => 'required|in:instock,outofstock',
             'featured' => 'nullable|boolean',

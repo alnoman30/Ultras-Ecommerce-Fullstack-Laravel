@@ -141,8 +141,19 @@
                         <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
                     </div>
                     <div class="product-single__price">
-                        <span class="current-price">${{ number_format($product->regular_price, 2) }}</span>
-                    </div>
+    @if(!empty($product->sale_price))
+        <span class="current-price">
+            ${{ number_format($product->sale_price, 2) }}
+        </span>
+        <span class="regular-price " style="text-decoration: line-through; color: red; font-size: 14px;">
+            ${{ number_format($product->regular_price, 2) }}
+        </span>
+    @else
+        <span class="current-price">
+            ${{ number_format($product->regular_price, 2) }}
+        </span>
+    @endif
+</div>
                     <div class="product-single__short-desc">
                         <p>{{ $product->short_description }}</p>
                     </div>
@@ -474,7 +485,7 @@
                                                 class="pc__img pc__img-second">
                                         @endif
                                     </a>
-
+                                    
                                     <button
                                         class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
                                         data-aside="cartDrawer" title="Add To Cart">

@@ -67,7 +67,7 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
 
-        return back()->with('success', 'Item removed!');
+        return back()->with('success', 'Item removed from cart!');
     }
 
     // Update Quantity
@@ -84,7 +84,7 @@ class CartController extends Controller
 
     session()->put('cart', $cart);
 
-    return back()->with('success', 'Cart updated!');
+    return back()->with('success', 'Cart item updated!');
 }
 
     // 🧹 Clear Cart

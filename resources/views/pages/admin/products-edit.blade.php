@@ -180,7 +180,7 @@
 
                         <fieldset>
                             <div class="body-title mb-10">Sale Price *</div>
-                            <input type="text" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}" required>
+                            <input type="text" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}">
                             @error('sale_price')
                                 <div class="text-red-500 text-tiny mt-1">{{ $message }}</div>
                             @enderror

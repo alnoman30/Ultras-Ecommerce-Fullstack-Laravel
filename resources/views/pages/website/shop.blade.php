@@ -374,6 +374,8 @@
 
                 <div class="products-grid row row-cols-2 row-cols-md-3" id="products-grid">
                     @foreach ($products as $product)
+                    <form name="addtocart-form" method="post" action="{{ route('cart.add') }}">
+                        @csrf
                         <div class="product-card-wrapper">
                             <div class="product-card mb-3 mb-md-4 mb-xxl-5">
                                 <div class="pc__img-wrapper">
@@ -418,9 +420,11 @@
                                             </svg>
                                         </span>
                                     </div>
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" name="quantity" value="1">
 
                                     <button
-                                        class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart js-open-aside"
+                                        class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium js-add-cart"
                                         data-aside="cartDrawer" title="Add To Cart">
                                         Add To Cart
                                     </button>
@@ -432,7 +436,18 @@
                                             href="{{ route('product.details', $product->slug) }}">{{ $product->name }}</a>
                                     </h6>
                                     <div class="product-card__price d-flex">
-                                        <span class="money price">${{ $product->regular_price }}</span>
+                                    @if(!empty($product->sale_price))
+    <span class="money price text-danger me-2">
+        ${{ number_format($product->sale_price, 2) }}
+    </span>
+    <span class="money price text-decoration-line-through text-secondary">
+        ${{ number_format($product->regular_price, 2) }}
+    </span>
+@else
+    <span class="money price">
+        ${{ number_format($product->regular_price, 2) }}
+    </span>
+@endif
                                     </div>
                                     <div class="product-card__review d-flex align-items-center">
                                         <div class="reviews-group d-flex">
@@ -457,6 +472,8 @@
                                 </div>
                             </div>
                         </div>
+
+                    </form>
                     @endforeach
                 </div>
 
